@@ -1,33 +1,42 @@
 import React, { useState } from "react";
 
-function ListingCard({ id, description, image, location, onDelete }) {
-  const [isFavorite, setFavorite] = useState(false);
+function ListingCard(props) {
+  const [isActive, setIsActive] = useState(false);
+
+  function handleStarClick() {
+    setIsActive(!isActive);
+  }
+
+  function onDelete(event) {
+    const deleteId = event.target.value;
+  }
 
   return (
     <li className="card">
       <div className="image">
         <span className="price">$0</span>
-        <img src={image} alt={`${description}`} />
+        <img src={props.image} alt={props.description} />
       </div>
       <div className="details">
-        {isFavorite ? (
+        {isActive ? (
           <button
-            onClick={() => setFavorite(!isFavorite)}
+            onClick={handleStarClick}
             className="emoji-button favorite active"
           >
             ★
           </button>
         ) : (
-          <button
-            onClick={() => setFavorite(!isFavorite)}
-            className="emoji-button favorite"
-          >
+          <button onClick={handleStarClick} className="emoji-button favorite">
             ☆
           </button>
         )}
-        <strong>{description}</strong>
-        <span> · {location}</span>
-        <button onClick={() => onDelete(id)} className="emoji-button delete">
+        <strong>{props.description}</strong>
+        <span> · {props.location}</span>
+        <button
+          value={props.id}
+          onClick={onDelete}
+          className="emoji-button delete"
+        >
           🗑
         </button>
       </div>
@@ -36,3 +45,10 @@ function ListingCard({ id, description, image, location, onDelete }) {
 }
 
 export default ListingCard;
+
+//I can remove a listing from the page
+//  => Delete request from fetch
+//by clicking the trash can icon.
+//   => onClick Event listener on trash can
+//This change should be persisted in the backend.
+//    => update the database

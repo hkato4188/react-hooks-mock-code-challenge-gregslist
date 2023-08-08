@@ -1,23 +1,25 @@
 import React from "react";
 import ListingCard from "./ListingCard";
 
-function ListingsContainer({ list, onDelete }) {
-  const renderedListItems = list.map((item) => {
+//Question:  how to get the ListingsContainer to render all our ListingCards
+//map function will be useful
+//we can put any information we want so its flexible
+
+function ListingsContainer({ listData }) {
+  const renderedCards = listData.map((item) => {
     return (
       <ListingCard
         key={item.id}
         id={item.id}
         description={item.description}
-        image={item.image}
         location={item.location}
-        onDelete={onDelete}
+        image={item.image}
       />
     );
   });
-
   return (
     <main>
-      <ul className="cards">{renderedListItems}</ul>
+      <ul className="cards">{renderedCards}</ul>
     </main>
   );
 }
