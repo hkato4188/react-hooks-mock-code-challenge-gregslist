@@ -22,9 +22,9 @@ function Form({ addNewListing }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="searchbar" onSubmit={handleSubmit}>
       <br />
-      <label> Description:</label>
+      <label>Description:</label>
       <input
         type="text"
         name="description"
@@ -32,7 +32,7 @@ function Form({ addNewListing }) {
         value={description}
       />
 
-      <label> Image URL:</label>
+      <label>Image:</label>
       <input
         type="text"
         name="image"
@@ -40,7 +40,7 @@ function Form({ addNewListing }) {
         value={image}
       />
 
-      <label> Location:</label>
+      <label>Location:</label>
       <input
         type="text"
         name="location"

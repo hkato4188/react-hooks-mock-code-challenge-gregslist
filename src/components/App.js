@@ -4,6 +4,8 @@ import ListingsContainer from "./ListingsContainer";
 
 function App() {
   const [list, setList] = useState([]);
+  const [search, setSearch] = useState("");
+  const [sortedList, setSortedList] = useState(false);
   const baseUrl = `http://localhost:6001/listings`;
 
   useEffect(() => {
@@ -13,24 +15,18 @@ function App() {
   }, []);
 
   function handleDelete(id) {
-    fetch(`${baseUrl}/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then(() => {
-        console.log("deleted!");
-        const updatedList = list.filter((item) => item.id !== id);
-        setList(updatedList);
-      });
+    const updatedList = list.filter((item) => item.id !== id);
+    setList(updatedList);
   }
 
   function handleSearch(search) {
-    const filteredList = list.filter(
-      (i) =>
-        search === "All" ||
-        i.description.toLowerCase().includes(search.toLowerCase())
+    setList((prev) =>
+      prev.filter(
+        (p) =>
+          search === "" ||
+          p.description.toLowerCase().includes(search.toLowerCase())
+      )
     );
-    setList(filteredList);
   }
 
   function handleFormSubmit(formData) {
@@ -45,10 +41,45 @@ function App() {
       });
   }
 
+  function customSort(arr, filter) {
+    console.log("sorting");
+    let noSwaps;
+    for (let i = arr.length; i > 0; i--) {
+      noSwaps = true;
+      for (let j = 0; j < i - 1; j++) {
+        if (arr[j][`${filter}`] > arr[j + 1][`${filter}`]) {
+          let temp = arr[j];
+          arr[j] = arr[j + 1];
+          arr[j + 1] = temp;
+          noSwaps = false;
+        }
+      }
+      if (noSwaps) break;
+    }
+    return arr;
+  }
+
+  function handleSort() {
+    const sortByDescription = customSort(list, "description");
+    const sortByLocation = customSort(sortByDescription, "location");
+    setSortedList(!sortedList);
+    setList(sortByLocation);
+  }
+
   return (
     <div className="app">
-      <Header onSearch={handleSearch} addNewListing={handleFormSubmit} />
-      <ListingsContainer list={list} onDelete={handleDelete} />
+      <Header
+        onSearch={handleSearch}
+        addNewListing={handleFormSubmit}
+        search={search}
+        setSearch={setSearch}
+      />
+      <ListingsContainer
+        handleSort={handleSort}
+        search={search}
+        list={list}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }

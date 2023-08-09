@@ -1,22 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 
-function Search({ list, onSearch }) {
-  const [search, setSearch] = useState("");
-
-  function handleSubmit(e) {
+function Search({ onSearch, search, setSearch }) {
+  function handleSearchSubmit(e) {
     e.preventDefault();
-    onSearch(search);
+    setSearch(e.target.children[0].value);
   }
 
-  console.log(search);
+  //=> originally called onSearch in event handler
   return (
-    <form className="searchbar" onSubmit={handleSubmit}>
+    <form className="searchbar" onSubmit={handleSearchSubmit}>
       <input
         type="text"
         id="search"
         placeholder="search free stuff"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        //For search functionality to comply with cc deliverable
+        //value={search}
+        //onChange={(e) => setSearch(e.target.value)}
       />
       <button type="submit">🔍</button>
     </form>
